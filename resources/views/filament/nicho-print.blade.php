@@ -39,6 +39,63 @@
         @endforelse
         </tbody>
     </table>
+    <h2>Estado de cuenta por botella</h2>
+    @foreach($nicho->products as $product)
+        <h3>{{ $product->name }}</h3>
+        @php
+            $movimientos = $nicho->transactions()
+                ->with(['details' => function($q) use ($product) {
+                    $q->where('product_id', $product->id);
+                }])
+                ->orderBy('transaction_date')
+                ->get()
+                ->flatMap(function($tx) use ($product) {
+                    return $tx->details->map(function($detail) use ($tx) {
+                        return [
+                            'date' => $tx->transaction_date,
+                            'type' => $tx->type,
+                            'quantity' => $detail->quantity_change,
+                            'notes' => $tx->notes,
+                            'ticket' => $tx->ticket_number,
+                        ];
+                    });
+                })->sortBy('date')->values();
+            $saldo = 0;
+            $saldos = [];
+            foreach ($movimientos as $mov) {
+                $saldo += $mov['quantity'];
+                $saldos[] = $saldo;
+            }
+        @endphp
+        @if($movimientos->count())
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Saldo</th>
+                    <th>Notas</th>
+                    <th>Ticket</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($movimientos as $i => $mov)
+                <tr>
+                    <td>{{ \Carbon\Carbon::parse($mov['date'])->format('d/m/Y H:i') }}</td>
+                    <td>{{ $mov['type'] === 'addition' ? 'Adición' : 'Consumo' }}</td>
+                    <td style="text-align:right;">{{ number_format($mov['quantity'], 2) }}</td>
+                    <td style="text-align:right;">{{ number_format($saldos[$i], 2) }}</td>
+                    <td>{{ $mov['notes'] }}</td>
+                    <td>{{ $mov['ticket'] }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        @else
+            <p>No hay movimientos para este producto.</p>
+        @endif
+    @endforeach
     <button onclick="window.print()">Imprimir</button>
 </body>
 </html>
