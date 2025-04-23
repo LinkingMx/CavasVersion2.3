@@ -187,6 +187,13 @@ class ViewNicho extends ViewRecord
                         throw $e;
                     }
                 }),
+            Action::make('printNicho')
+                ->label('Imprimir Información')
+                ->icon('heroicon-o-printer')
+                ->color('secondary')
+                ->url(fn ($record) => route('nichos.print', $record))
+                ->openUrlInNewTab()
+                ->modal(false),
         ];
     }
 }
