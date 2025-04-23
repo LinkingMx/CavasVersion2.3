@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Imports\ProductImporter;
+use Filament\Tables\Actions\ImportAction;
 
 class ProductResource extends Resource
 {
@@ -59,7 +61,12 @@ class ProductResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ])
+            ->headerActions([
+                ImportAction::make()
+                    ->importer(ProductImporter::class)
+            ])
+    ;
     }
 
     public static function getRelations(): array
@@ -74,7 +81,7 @@ class ProductResource extends Resource
         return [
             'index' => Pages\ListProducts::route('/'),
             'create' => Pages\CreateProduct::route('/create'),
-            'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'edit' => Pages\EditProduct::route('/{record}/edit')
         ];
     }
 }

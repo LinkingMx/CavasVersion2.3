@@ -112,7 +112,7 @@ class NichoResource extends Resource
                 Section::make('Current Inventory')
                     ->collapsible()
                     ->schema([
-                        RepeatableEntry::make('products')
+                        RepeatableEntry::make('nonEmptyProducts')
                             ->label('Inventory')
                             ->schema([
                                 TextEntry::make('name')->label('Product Name')->columnSpan(1),
@@ -121,7 +121,7 @@ class NichoResource extends Resource
                             ->columns(2),
                         TextEntry::make('empty_inventory_message')
                             ->default('No products in this nicho yet.')
-                            ->hidden(fn ($record) => $record->products->isNotEmpty()),
+                            ->hidden(fn ($record) => $record->nonEmptyProducts->isNotEmpty()),
                     ]),
             ]);
     }
