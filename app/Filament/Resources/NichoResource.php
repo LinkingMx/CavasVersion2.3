@@ -25,7 +25,7 @@ class NichoResource extends Resource
     // --- NAVIGATION PROPERTIES ---
     protected static ?string $navigationIcon = 'heroicon-o-cube';
     protected static ?string $navigationGroup = 'Inventory Management';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 40;
     // --- END NAVIGATION PROPERTIES ---
 
     public static function form(Form $form): Form
