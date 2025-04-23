@@ -77,7 +77,7 @@ class TopCustomersWidget extends ChartWidget
 
     protected function getType(): string
     {
-        return 'pie';
+        return 'bar';
     }
     
     protected function getOptions(): array
