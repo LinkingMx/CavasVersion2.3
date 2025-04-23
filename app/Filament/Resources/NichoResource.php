@@ -86,6 +86,12 @@ class NichoResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->filters([
+                Tables\Filters\SelectFilter::make('restaurant_id')
+                    ->label('Restaurante')
+                    ->relationship('restaurant', 'name')
+                    ->searchable(),
+            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
