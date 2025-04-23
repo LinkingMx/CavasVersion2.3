@@ -53,4 +53,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Restaurant::class, 'restaurant_user');
         // ->withTimestamps(); // Uncomment if you want timestamps
     }
+
+    
 }
