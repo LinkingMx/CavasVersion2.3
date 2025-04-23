@@ -201,7 +201,7 @@ class ViewNicho extends ViewRecord
             Action::make('printNicho')
                 ->label('Imprimir Información')
                 ->icon('heroicon-o-printer')
-                ->color('secondary')
+                ->color('success')  // Cambio de 'secondary' a 'success' para mejor visibilidad
                 ->url(fn ($record) => route('nichos.print', $record))
                 ->openUrlInNewTab()
                 ->modal(false),
