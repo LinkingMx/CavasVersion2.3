@@ -16,6 +16,7 @@ use Filament\Infolists;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\RepeatableEntry;
+use Illuminate\Support\Facades\Auth;
 
 class NichoResource extends Resource
 {
@@ -29,10 +30,15 @@ class NichoResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $restaurantOptions = [];
+        if ($user && method_exists($user, 'restaurants')) {
+            $restaurantOptions = $user->restaurants()->pluck('name', 'id')->toArray();
+        }
         return $form
             ->schema([
                 Forms\Components\Select::make('restaurant_id')
-                    ->relationship('restaurant', 'name')
+                    ->options($restaurantOptions)
                     ->required()
                     ->searchable()
                     ->preload()
@@ -58,6 +64,13 @@ class NichoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                $user = Auth::user();
+                if ($user && method_exists($user, 'restaurants')) {
+                    $restaurantIds = $user->restaurants()->pluck('restaurants.id');
+                    $query->whereIn('restaurant_id', $restaurantIds);
+                }
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('identifier')
                     ->searchable()
