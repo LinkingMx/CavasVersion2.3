@@ -56,6 +56,12 @@ class UserResource extends Resource
                     ->searchable()
                     ->label('Assigned Restaurants')
                     ->columnSpanFull(),
+                // Using Select Component
+                Forms\Components\Select::make('roles')
+                ->relationship('roles', 'name')
+                ->multiple()
+                ->preload()
+                ->searchable(),
             ]);
     }
 

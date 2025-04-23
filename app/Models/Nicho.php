@@ -35,4 +35,12 @@ class Nicho extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    // Método para obtener solo los productos con cantidad mayor a 0
+    public function nonEmptyProducts()
+    {
+        return $this->belongsToMany(Product::class, 'nicho_product')
+                    ->withPivot('quantity')
+                    ->wherePivot('quantity', '>', 0);
+    }
 }

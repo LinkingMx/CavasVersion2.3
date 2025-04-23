@@ -79,13 +79,24 @@ class ViewNicho extends ViewRecord
                                 'product_id' => $item['product_id'],
                                 'quantity_change' => $item['quantity'],
                             ]);
-                            $inventory = NichoProduct::firstOrCreate(
-                                ['nicho_id' => $nichoId, 'product_id' => $item['product_id']],
-                                ['quantity' => 0]
-                            );
-                            // Usar update en vez de increment para asegurar el valor correcto
-                            $inventory->quantity = $inventory->quantity + $item['quantity'];
-                            $inventory->save();
+                            
+                            // Buscar si ya existe un registro para este producto en este nicho
+                            $inventory = NichoProduct::where('nicho_id', $nichoId)
+                                ->where('product_id', $item['product_id'])
+                                ->first();
+                                
+                            if ($inventory) {
+                                // Si existe, actualizar la cantidad
+                                $inventory->quantity = $inventory->quantity + $item['quantity'];
+                                $inventory->save();
+                            } else {
+                                // Si no existe, crear un nuevo registro
+                                NichoProduct::create([
+                                    'nicho_id' => $nichoId,
+                                    'product_id' => $item['product_id'],
+                                    'quantity' => $item['quantity']
+                                ]);
+                            }
                         }
                     });
                     Notification::make()
