@@ -3,19 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\NichoResource\Pages;
-use App\Filament\Resources\NichoResource\RelationManagers;
 use App\Models\Nicho;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Infolists;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\RepeatableEntry;
 use Illuminate\Support\Facades\Auth;
 
 class NichoResource extends Resource
@@ -24,8 +22,16 @@ class NichoResource extends Resource
 
     // --- NAVIGATION PROPERTIES ---
     protected static ?string $navigationIcon = 'heroicon-o-cube';
-    protected static ?string $navigationGroup = 'Inventory Management';
-    protected static ?int $navigationSort = 40;
+
+    protected static ?string $navigationGroup = 'Gestión de Inventario';
+
+    protected static ?int $navigationSort = 10;
+
+    protected static ?string $navigationLabel = 'Nichos';
+
+    protected static ?string $modelLabel = 'nicho';
+
+    protected static ?string $pluralModelLabel = 'nichos';
     // --- END NAVIGATION PROPERTIES ---
 
     public static function form(Form $form): Form
@@ -35,6 +41,7 @@ class NichoResource extends Resource
         if ($user && method_exists($user, 'restaurants')) {
             $restaurantOptions = $user->restaurants()->pluck('name', 'id')->toArray();
         }
+
         return $form
             ->schema([
                 Forms\Components\Select::make('restaurant_id')

@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CustomerResource\Pages;
-use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CustomerResource extends Resource
 {
@@ -19,8 +16,16 @@ class CustomerResource extends Resource
 
     // --- NAVIGATION PROPERTIES ---
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'Catalog';
-    protected static ?int $navigationSort = 20;
+
+    protected static ?string $navigationGroup = 'Catálogo';
+
+    protected static ?int $navigationSort = 21;
+
+    protected static ?string $navigationLabel = 'Clientes';
+
+    protected static ?string $modelLabel = 'cliente';
+
+    protected static ?string $pluralModelLabel = 'clientes';
     // --- END NAVIGATION PROPERTIES ---
 
     public static function form(Form $form): Form

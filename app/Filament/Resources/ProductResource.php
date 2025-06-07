@@ -2,18 +2,15 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Imports\ProductImporter;
 use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Imports\ProductImporter;
 use Filament\Tables\Actions\ImportAction;
+use Filament\Tables\Table;
 
 class ProductResource extends Resource
 {
@@ -21,8 +18,16 @@ class ProductResource extends Resource
 
     // --- NAVIGATION PROPERTIES ---
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';
-    protected static ?string $navigationGroup = 'Catalog';
-    protected static ?int $navigationSort = 10;
+
+    protected static ?string $navigationGroup = 'Catálogo';
+
+    protected static ?int $navigationSort = 20;
+
+    protected static ?string $navigationLabel = 'Productos';
+
+    protected static ?string $modelLabel = 'producto';
+
+    protected static ?string $pluralModelLabel = 'productos';
     // --- END NAVIGATION PROPERTIES ---
 
     public static function form(Form $form): Form
@@ -64,9 +69,8 @@ class ProductResource extends Resource
             ])
             ->headerActions([
                 ImportAction::make()
-                    ->importer(ProductImporter::class)
-            ])
-    ;
+                    ->importer(ProductImporter::class),
+            ]);
     }
 
     public static function getRelations(): array
@@ -81,7 +85,7 @@ class ProductResource extends Resource
         return [
             'index' => Pages\ListProducts::route('/'),
             'create' => Pages\CreateProduct::route('/create'),
-            'edit' => Pages\EditProduct::route('/{record}/edit')
+            'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
     }
 }
