@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\CustomerResource\Pages;
 
 use App\Filament\Resources\CustomerResource;
-use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
 
 class CreateCustomer extends CreateRecord
 {
@@ -15,9 +14,9 @@ class CreateCustomer extends CreateRecord
     {
         return Notification::make()
             ->success()
-            ->title('Customer Created')
+            ->title('Cliente Creado')
             ->icon('heroicon-o-check-circle')
-            ->body("The customer '{$this->record->name}' has been created successfully.");
+            ->body("El cliente '{$this->record->name}' ha sido creado exitosamente.");
     }
 
     protected function getRedirectUrl(): string

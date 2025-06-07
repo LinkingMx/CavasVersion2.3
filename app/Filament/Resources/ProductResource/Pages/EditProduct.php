@@ -4,8 +4,8 @@ namespace App\Filament\Resources\ProductResource\Pages;
 
 use App\Filament\Resources\ProductResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
 
 class EditProduct extends EditRecord
 {
@@ -22,9 +22,9 @@ class EditProduct extends EditRecord
     {
         return Notification::make()
             ->success()
-            ->title('Product Updated')
+            ->title('Producto Actualizado')
             ->icon('heroicon-o-check-circle')
-            ->body("The product '{$this->record->name}' has been updated successfully.");
+            ->body("El producto '{$this->record->name}' ha sido actualizado exitosamente.");
     }
 
     protected function getRedirectUrl(): string
