@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
-use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
 
 class CreateUser extends CreateRecord
 {
@@ -15,9 +14,9 @@ class CreateUser extends CreateRecord
     {
         return Notification::make()
             ->success()
-            ->title('User Created')
+            ->title('Usuario Creado')
             ->icon('heroicon-o-check-circle')
-            ->body("The user '{$this->record->name}' has been created successfully.");
+            ->body("El usuario '{$this->record->name}' ha sido creado exitosamente.");
     }
 
     protected function getRedirectUrl(): string

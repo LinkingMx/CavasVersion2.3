@@ -4,8 +4,8 @@ namespace App\Filament\Resources\RestaurantResource\Pages;
 
 use App\Filament\Resources\RestaurantResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
 
 class EditRestaurant extends EditRecord
 {
@@ -22,9 +22,9 @@ class EditRestaurant extends EditRecord
     {
         return Notification::make()
             ->success()
-            ->title('Restaurant Updated')
+            ->title('Restaurante Actualizado')
             ->icon('heroicon-o-check-circle')
-            ->body("The restaurant '{$this->record->name}' has been updated successfully.");
+            ->body("El restaurante '{$this->record->name}' ha sido actualizado exitosamente.");
     }
 
     protected function getRedirectUrl(): string

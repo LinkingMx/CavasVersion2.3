@@ -4,8 +4,8 @@ namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
 
 class EditUser extends EditRecord
 {
@@ -22,9 +22,9 @@ class EditUser extends EditRecord
     {
         return Notification::make()
             ->success()
-            ->title('User Updated')
+            ->title('Usuario Actualizado')
             ->icon('heroicon-o-check-circle')
-            ->body("The user '{$this->record->name}' has been updated successfully.");
+            ->body("El usuario '{$this->record->name}' ha sido actualizado exitosamente.");
     }
 
     protected function getRedirectUrl(): string

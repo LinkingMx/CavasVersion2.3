@@ -37,20 +37,22 @@ class ProductImporter extends Importer
             // Verificación de datos requeridos
             if (empty($this->data['name'])) {
                 Log::error('ProductImporter: Missing required name field');
+
                 return null;
             }
 
             // Buscar producto existente por SKU si está disponible
-            if (!empty($this->data['external_sku'])) {
+            if (! empty($this->data['external_sku'])) {
                 $existingProduct = Product::where('external_sku', $this->data['external_sku'])->first();
                 if ($existingProduct) {
                     Log::info('ProductImporter: Updating existing product', [
                         'id' => $existingProduct->id,
                         'name' => $this->data['name'],
                     ]);
-                    
+
                     $existingProduct->name = $this->data['name'];
                     $existingProduct->external_sku = $this->data['external_sku'];
+
                     return $existingProduct;
                 }
             }
@@ -59,27 +61,28 @@ class ProductImporter extends Importer
             Log::info('ProductImporter: Creating new product', [
                 'name' => $this->data['name'],
             ]);
-            
-            $product = new Product();
+
+            $product = new Product;
             $product->name = $this->data['name'];
             $product->external_sku = $this->data['external_sku'] ?? null;
-            
+
             return $product;
         } catch (\Exception $e) {
             Log::error('ProductImporter: Error in resolveRecord', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
+
             return null;
         }
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your product import has completed and ' . number_format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Su importación de productos se ha completado y se '.number_format($import->successful_rows).' '.str('fila')->plural($import->successful_rows).' importadas.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('fila')->plural($failedRowsCount).' no pudieron ser importadas.';
         }
 
         return $body;

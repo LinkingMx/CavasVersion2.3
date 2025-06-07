@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\ProductResource\Pages;
 
 use App\Filament\Resources\ProductResource;
-use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
 
 class CreateProduct extends CreateRecord
 {
@@ -15,9 +14,9 @@ class CreateProduct extends CreateRecord
     {
         return Notification::make()
             ->success()
-            ->title('Product Created')
+            ->title('Producto Creado')
             ->icon('heroicon-o-check-circle')
-            ->body("The product '{$this->record->name}' has been created successfully.");
+            ->body("El producto '{$this->record->name}' ha sido creado exitosamente.");
     }
 
     protected function getRedirectUrl(): string
