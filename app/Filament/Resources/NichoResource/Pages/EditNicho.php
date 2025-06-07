@@ -4,8 +4,8 @@ namespace App\Filament\Resources\NichoResource\Pages;
 
 use App\Filament\Resources\NichoResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
 
 class EditNicho extends EditRecord
 {
@@ -22,9 +22,9 @@ class EditNicho extends EditRecord
     {
         return Notification::make()
             ->success()
-            ->title('Nicho Updated')
+            ->title('Nicho Actualizado')
             ->icon('heroicon-o-check-circle')
-            ->body("The nicho '{$this->record->identifier}' has been updated successfully.");
+            ->body("El nicho '{$this->record->identifier}' ha sido actualizado exitosamente.");
     }
 
     protected function getRedirectUrl(): string
