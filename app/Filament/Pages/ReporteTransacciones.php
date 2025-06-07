@@ -1,22 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\ReporteTransaccionesResource\Pages;
+namespace App\Filament\Pages;
 
-use App\Filament\Resources\ReporteTransaccionesResource;
-use Filament\Pages\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Pages\Page;
 
-class ListReporteTransacciones extends ListRecords
+class ReporteTransacciones extends Page
 {
-    protected static string $resource = ReporteTransaccionesResource::class;
-
-    protected static ?string $navigationGroup = 'Reports';
+    protected static ?string $navigationIcon = 'heroicon-o-document-report';
+    protected static ?string $navigationLabel = 'Reporte de transacciones';
+    protected static ?string $title = 'Reporte de transacciones';
+    protected static string $view = 'filament.pages.transactions-report';
+    protected static ?string $navigationGroup = 'Reportes';
     protected static ?int $navigationSort = 100;
-
-    protected function getActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
 }
