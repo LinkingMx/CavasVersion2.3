@@ -49,22 +49,22 @@ class NichoResource extends Resource
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->label('Restaurant'),
+                    ->label('Restaurante'),
                 Forms\Components\Select::make('customer_id')
                     ->relationship('customer', 'name')
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->label('Customer'),
+                    ->label('Cliente'),
                 Forms\Components\TextInput::make('identifier')
                     ->required()
                     ->maxLength(255)
-                    ->label('Identifier (e.g., CAVA-001)'),
+                    ->label('Identificador (ej. CAVA-001)'),
                 Forms\Components\Textarea::make('additional_info')
                     ->nullable()
                     ->maxLength(65535)
                     ->columnSpanFull()
-                    ->label('Additional Information'),
+                    ->label('Información Adicional'),
             ]);
     }
 
@@ -113,27 +113,27 @@ class NichoResource extends Resource
     {
         return $infolist
             ->schema([
-                Section::make('Nicho Details')
+                Section::make('Detalles del Nicho')
                     ->columns(2)
                     ->schema([
-                        TextEntry::make('identifier')->label('Identifier')->columnSpan(1),
-                        TextEntry::make('restaurant.name')->label('Restaurant')->columnSpan(1),
-                        TextEntry::make('customer.name')->label('Customer')->columnSpan(1),
-                        TextEntry::make('created_at')->label('Created')->dateTime()->columnSpan(1),
-                        TextEntry::make('additional_info')->label('Additional Information')->columnSpanFull(),
+                        TextEntry::make('identifier')->label('Identificador')->columnSpan(1),
+                        TextEntry::make('restaurant.name')->label('Restaurante')->columnSpan(1),
+                        TextEntry::make('customer.name')->label('Cliente')->columnSpan(1),
+                        TextEntry::make('created_at')->label('Creado')->dateTime()->columnSpan(1),
+                        TextEntry::make('additional_info')->label('Información Adicional')->columnSpanFull(),
                     ]),
-                Section::make('Current Inventory')
+                Section::make('Inventario Actual')
                     ->collapsible()
                     ->schema([
                         RepeatableEntry::make('nonEmptyProducts')
-                            ->label('Inventory')
+                            ->label('Inventario')
                             ->schema([
-                                TextEntry::make('name')->label('Product Name')->columnSpan(1),
-                                TextEntry::make('pivot.quantity')->label('Quantity')->numeric(decimalPlaces: 2)->columnSpan(1),
+                                TextEntry::make('name')->label('Nombre del Producto')->columnSpan(1),
+                                TextEntry::make('pivot.quantity')->label('Cantidad')->numeric(decimalPlaces: 2)->columnSpan(1),
                             ])
                             ->columns(2),
                         TextEntry::make('empty_inventory_message')
-                            ->default('No products in this nicho yet.')
+                            ->default('Aún no hay productos en este nicho.')
                             ->hidden(fn ($record) => $record->nonEmptyProducts->isNotEmpty()),
                     ]),
             ]);

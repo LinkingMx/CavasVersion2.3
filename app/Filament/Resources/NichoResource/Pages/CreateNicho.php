@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\NichoResource\Pages;
 
 use App\Filament\Resources\NichoResource;
-use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
 
 class CreateNicho extends CreateRecord
 {
@@ -15,9 +14,9 @@ class CreateNicho extends CreateRecord
     {
         return Notification::make()
             ->success()
-            ->title('Nicho Created')
+            ->title('Nicho Creado')
             ->icon('heroicon-o-check-circle')
-            ->body("The nicho '{$this->record->identifier}' has been created successfully.");
+            ->body("El nicho '{$this->record->identifier}' ha sido creado exitosamente.");
     }
 
     protected function getRedirectUrl(): string

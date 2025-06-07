@@ -3,17 +3,16 @@
 namespace App\Filament\Resources\NichoResource\Pages;
 
 use App\Filament\Resources\NichoResource;
-use Filament\Resources\Pages\ViewRecord;
-use Filament\Actions;
-use Filament\Forms;
+use App\Models\Nicho;
+use App\Models\NichoProduct;
 use App\Models\Product;
 use App\Models\Transaction;
-use App\Models\NichoProduct;
-use Illuminate\Support\Facades\DB;
-use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Storage;
+use Filament\Actions;
 use Filament\Actions\Action;
-use App\Models\Nicho;
+use Filament\Forms;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Support\Facades\DB;
 
 class ViewNicho extends ViewRecord
 {
@@ -23,38 +22,38 @@ class ViewNicho extends ViewRecord
     {
         return [
             Actions\Action::make('addBottles')
-                ->label('Add Bottles')
+                ->label('Agregar Botellas')
                 ->icon('heroicon-o-plus-circle')
                 ->color('primary')
                 ->modalWidth('xl')
                 ->form([
                     Forms\Components\Repeater::make('items')
-                        ->label('Products to Add')
+                        ->label('Productos a Agregar')
                         ->schema([
                             Forms\Components\Select::make('product_id')
-                                ->label('Product')
+                                ->label('Producto')
                                 ->options(Product::pluck('name', 'id')->toArray())
                                 ->searchable()
                                 ->required(),
                             Forms\Components\TextInput::make('quantity')
-                                ->label('Quantity Added')
+                                ->label('Cantidad Agregada')
                                 ->numeric()
                                 ->required(), // Remove minValue and step restrictions
                         ])
                         ->columns(2)
                         ->required()
-                        ->addActionLabel('Add Another Product'),
+                        ->addActionLabel('Agregar Otro Producto'),
                     Forms\Components\TextInput::make('ticket_number')
-                        ->label('Ticket Number (Optional)')
+                        ->label('Número de Ticket (Opcional)')
                         ->nullable(),
                     Forms\Components\FileUpload::make('ticket_photo_path')
-                        ->label('Ticket Photo (Optional)')
+                        ->label('Foto del Ticket (Opcional)')
                         ->disk('public')
                         ->directory('ticket-photos')
                         ->image()
                         ->nullable(),
                     Forms\Components\Textarea::make('notes')
-                        ->label('Notes (Optional)')
+                        ->label('Notas (Opcional)')
                         ->nullable()
                         ->columnSpanFull(),
                 ])
@@ -63,7 +62,7 @@ class ViewNicho extends ViewRecord
                     $transaction = null;
                     DB::transaction(function () use ($data, $nichoId, &$transaction) {
                         // Handle file upload
-                        if (!empty($data['ticket_photo_path'])) {
+                        if (! empty($data['ticket_photo_path'])) {
                             $data['ticket_photo_path'] = is_array($data['ticket_photo_path']) ? $data['ticket_photo_path'][0] : $data['ticket_photo_path'];
                         }
                         $transaction = Transaction::query()->create([
@@ -79,12 +78,12 @@ class ViewNicho extends ViewRecord
                                 'product_id' => $item['product_id'],
                                 'quantity_change' => $item['quantity'],
                             ]);
-                            
+
                             // Buscar si ya existe un registro para este producto en este nicho
                             $inventory = NichoProduct::where('nicho_id', $nichoId)
                                 ->where('product_id', $item['product_id'])
                                 ->first();
-                                
+
                             if ($inventory) {
                                 // Si existe, actualizar la cantidad
                                 $inventory->quantity = $inventory->quantity + $item['quantity'];
@@ -94,44 +93,45 @@ class ViewNicho extends ViewRecord
                                 NichoProduct::create([
                                     'nicho_id' => $nichoId,
                                     'product_id' => $item['product_id'],
-                                    'quantity' => $item['quantity']
+                                    'quantity' => $item['quantity'],
                                 ]);
                             }
                         }
                     });
                     Notification::make()
-                        ->title('Bottles Added Successfully')
+                        ->title('Botellas Agregadas Exitosamente')
                         ->icon('heroicon-o-check-circle')
-                        ->body("New items added to Nicho '{$record->identifier}'. Transaction ID: {$transaction->id}")
+                        ->body("Nuevos productos agregados al Nicho '{$record->identifier}'. ID de Transacción: {$transaction->id}")
                         ->success()
                         ->send();
                 }),
             Action::make('recordConsumption')
-                ->label('Record Consumption')
+                ->label('Registrar Consumo')
                 ->icon('heroicon-o-minus-circle')
                 ->color('warning')
                 ->modalWidth('lg')
-                ->modalSubmitActionLabel('Record Consumption')
+                ->modalSubmitActionLabel('Registrar Consumo')
                 ->form(function (Action $action, Nicho $record): array {
                     $inventoryItems = $record->products()->wherePivot('quantity', '>', 0)->get();
                     $schema = [];
-                    $schema[] = Forms\Components\Placeholder::make('info')->content('Enter the FINAL quantity remaining for each consumed item.');
+                    $schema[] = Forms\Components\Placeholder::make('info')->content('Ingrese la cantidad FINAL restante para cada producto consumido.');
                     if ($inventoryItems->isEmpty()) {
-                        $schema[] = Forms\Components\Placeholder::make('empty')->content('There are no items with positive quantity in this nicho to consume.');
+                        $schema[] = Forms\Components\Placeholder::make('empty')->content('No hay productos con cantidad positiva en este nicho para consumir.');
                     } else {
                         foreach ($inventoryItems as $item) {
                             $currentQty = $item->pivot->quantity;
-                            $schema[] = Forms\Components\TextInput::make('remaining_quantity.' . $item->id)
-                                ->label($item->name . ' (Current: ' . number_format($currentQty, 2) . ')')
+                            $schema[] = Forms\Components\TextInput::make('remaining_quantity.'.$item->id)
+                                ->label($item->name.' (Actual: '.number_format($currentQty, 2).')')
                                 ->numeric()
                                 ->minValue(0)
                                 ->maxValue($currentQty)
                                 ->step(0.1)
                                 ->nullable()
-                                ->placeholder('Enter final quantity (e.g., 0.7)');
+                                ->placeholder('Ingrese cantidad final (ej. 0.7)');
                         }
                     }
-                    $schema[] = Forms\Components\Textarea::make('notes')->label('Consumption Notes (Optional)')->columnSpanFull();
+                    $schema[] = Forms\Components\Textarea::make('notes')->label('Notas de Consumo (Opcional)')->columnSpanFull();
+
                     return $schema;
                 })
                 ->action(function (array $data, Nicho $record) {
@@ -141,7 +141,7 @@ class ViewNicho extends ViewRecord
                     $inventoryUpdates = [];
                     $transaction = null;
                     try {
-                        DB::transaction(function () use ($data, $nichoId, $record, &$consumptionOccurred, &$detailsToCreate, &$inventoryUpdates, &$transaction) {
+                        DB::transaction(function () use ($data, $nichoId, &$consumptionOccurred, &$detailsToCreate, &$inventoryUpdates, &$transaction) {
                             $currentInventory = \App\Models\NichoProduct::where('nicho_id', $nichoId)->where('quantity', '>', 0)->lockForUpdate()->get()->keyBy('product_id');
                             foreach (($data['remaining_quantity'] ?? []) as $productId => $remainingQty) {
                                 if (filled($remainingQty) && isset($currentInventory[$productId])) {
@@ -175,24 +175,24 @@ class ViewNicho extends ViewRecord
                         });
                         if ($consumptionOccurred && $transaction) {
                             Notification::make()
-                                ->title('Consumption Recorded')
+                                ->title('Consumo Registrado')
                                 ->icon('heroicon-o-check-circle')
-                                ->body("Inventory updated for Nicho '{$record->identifier}'. Transaction ID: {$transaction->id}. Customer will be notified.")
+                                ->body("Inventario actualizado para el Nicho '{$record->identifier}'. ID de Transacción: {$transaction->id}. El cliente será notificado.")
                                 ->success()
                                 ->send();
                         } else {
                             Notification::make()
-                                ->title('No Consumption Recorded')
+                                ->title('No se Registró Consumo')
                                 ->icon('heroicon-o-information-circle')
-                                ->body("No changes were made. Either no final quantities were entered or they matched the current inventory for Nicho '{$record->identifier}'.")
+                                ->body("No se realizaron cambios. O no se ingresaron cantidades finales o coincidían con el inventario actual del Nicho '{$record->identifier}'.")
                                 ->warning()
                                 ->send();
                         }
                     } catch (\Throwable $e) {
                         Notification::make()
-                            ->title('Error Recording Consumption')
+                            ->title('Error al Registrar Consumo')
                             ->icon('heroicon-o-x-circle')
-                            ->body('An error occurred while recording the consumption. Please try again or contact support.')
+                            ->body('Ocurrió un error al registrar el consumo. Por favor intente nuevamente o contacte soporte.')
                             ->danger()
                             ->send();
                         throw $e;
