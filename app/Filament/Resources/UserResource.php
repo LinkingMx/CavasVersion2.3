@@ -40,7 +40,7 @@ class UserResource extends Resource
                     ->unique(table: 'users', column: 'email', ignoreRecord: true),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->label('Password')
+                    ->label('Contraseña')
                     ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
                     ->required(fn (string $context) => $context === 'create')
                     ->confirmed()
@@ -49,7 +49,7 @@ class UserResource extends Resource
                     ->dehydrated(fn ($state) => filled($state)),
                 Forms\Components\TextInput::make('password_confirmation')
                     ->password()
-                    ->label('Confirm Password')
+                    ->label('Confirmar Contraseña')
                     ->required(fn (string $context) => $context === 'create')
                     ->maxLength(255)
                     ->autocomplete('new-password')
@@ -59,7 +59,7 @@ class UserResource extends Resource
                     ->relationship('restaurants', 'name')
                     ->preload()
                     ->searchable()
-                    ->label('Assigned Restaurants')
+                    ->label('Restaurantes Asignados')
                     ->columnSpanFull(),
                 // Using Select Component
                 Forms\Components\Select::make('roles')
@@ -79,7 +79,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('restaurants.name')
-                    ->label('Restaurants')
+                    ->label('Restaurantes')
                     ->listWithLineBreaks()
                     ->limitList(3)
                     ->expandableLimitedList(),

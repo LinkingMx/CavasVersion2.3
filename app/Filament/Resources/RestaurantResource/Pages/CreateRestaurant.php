@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\RestaurantResource\Pages;
 
 use App\Filament\Resources\RestaurantResource;
-use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
 
 class CreateRestaurant extends CreateRecord
 {
@@ -15,9 +14,9 @@ class CreateRestaurant extends CreateRecord
     {
         return Notification::make()
             ->success()
-            ->title('Restaurant Created')
+            ->title('Restaurante Creado')
             ->icon('heroicon-o-check-circle')
-            ->body("The restaurant '{$this->record->name}' has been created successfully.");
+            ->body("El restaurante '{$this->record->name}' ha sido creado exitosamente.");
     }
 
     protected function getRedirectUrl(): string
