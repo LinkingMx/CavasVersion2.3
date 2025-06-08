@@ -33,8 +33,10 @@ class UserResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nombre')
                     ->required(),
                 Forms\Components\TextInput::make('email')
+                    ->label('Correo Electrónico')
                     ->email()
                     ->required()
                     ->unique(table: 'users', column: 'email', ignoreRecord: true),
@@ -63,6 +65,7 @@ class UserResource extends Resource
                     ->columnSpanFull(),
                 // Using Select Component
                 Forms\Components\Select::make('roles')
+                    ->label('Roles')
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->preload()
@@ -75,8 +78,10 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label('Correo Electrónico')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('restaurants.name')
                     ->label('Restaurantes')

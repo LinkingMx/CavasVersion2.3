@@ -80,15 +80,19 @@ class NichoResource extends Resource
             })
             ->columns([
                 Tables\Columns\TextColumn::make('identifier')
+                    ->label('Identificador')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('restaurant.name')
+                    ->label('Restaurante')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('customer.name')
+                    ->label('Cliente')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Creado')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

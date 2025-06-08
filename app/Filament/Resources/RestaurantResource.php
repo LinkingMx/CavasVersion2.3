@@ -33,9 +33,11 @@ class RestaurantResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nombre')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('address')
+                    ->label('Dirección')
                     ->nullable()
                     ->maxLength(65535)
                     ->columnSpanFull(),
@@ -47,12 +49,15 @@ class RestaurantResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('address')
+                    ->label('Dirección')
                     ->searchable()
                     ->limit(50),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Creado')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

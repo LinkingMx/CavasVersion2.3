@@ -35,10 +35,12 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nombre')
                     ->required()
                     ->maxLength(255)
                     ->unique(table: 'products', column: 'name', ignoreRecord: true),
                 Forms\Components\TextInput::make('external_sku')
+                    ->label('SKU Externo')
                     ->nullable()
                     ->maxLength(255)
                     ->unique(table: 'products', column: 'external_sku', ignoreRecord: true),
@@ -50,12 +52,15 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('external_sku')
+                    ->label('SKU Externo')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Creado')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

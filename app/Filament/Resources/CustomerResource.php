@@ -33,16 +33,20 @@ class CustomerResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nombre')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
+                    ->label('Correo Electrónico')
                     ->required()
                     ->email()
                     ->maxLength(255)
                     ->unique(table: 'customers', column: 'email', ignoreRecord: true),
                 Forms\Components\DatePicker::make('birthday')
+                    ->label('Fecha de Nacimiento')
                     ->nullable(),
                 Forms\Components\Textarea::make('additional_info')
+                    ->label('Información Adicional')
                     ->nullable()
                     ->maxLength(65535)
                     ->columnSpanFull(),
@@ -54,14 +58,18 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label('Correo Electrónico')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('birthday')
+                    ->label('Fecha de Nacimiento')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Creado')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
