@@ -1,2 +1,4 @@
-*
+# Logs pero mantener estructura
+*.log
 !.gitignore
+!README.md

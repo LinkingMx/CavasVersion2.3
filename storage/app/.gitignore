@@ -1,4 +1,10 @@
-*
+# Permitir estructura de directorios pero excluir archivos de prueba
 !private/
 !public/
+!templates/
 !.gitignore
+
+# Excluir archivos de prueba CSV
+test_*.csv
+final_*.csv
+*_test.csv

@@ -1,2 +1,12 @@
-*
+# Permitir directorios y archivos necesarios
 !.gitignore
+!imports/
+!ticket-photos/
+!*.png
+!*.jpg
+!*.jpeg
+!*.gif
+!*.svg
+
+# README files
+!README.md
