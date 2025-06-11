@@ -12,6 +12,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'external_sku',
+        'price',
     ];
 
     // Prepare for relationship with NichoProduct (pivot) and TransactionDetail

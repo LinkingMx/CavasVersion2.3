@@ -41,6 +41,13 @@ class RestaurantResource extends Resource
                     ->nullable()
                     ->maxLength(65535)
                     ->columnSpanFull(),
+                Forms\Components\TextInput::make('average_price')
+                    ->label('Precio Promedio')
+                    ->numeric()
+                    ->prefix('$')
+                    ->step(0.01)
+                    ->nullable()
+                    ->maxValue(999999.99),
             ]);
     }
 
@@ -56,6 +63,10 @@ class RestaurantResource extends Resource
                     ->label('Dirección')
                     ->searchable()
                     ->limit(50),
+                Tables\Columns\TextColumn::make('average_price')
+                    ->label('Precio Promedio')
+                    ->money('MXN')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Creado')
                     ->dateTime()
