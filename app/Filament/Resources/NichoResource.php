@@ -34,6 +34,43 @@ class NichoResource extends Resource
     protected static ?string $pluralModelLabel = 'nichos';
     // --- END NAVIGATION PROPERTIES ---
 
+    /**
+     * Generate the next identifier for a restaurant
+     */
+    protected static function generateNextIdentifier(int $restaurantId): string
+    {
+        $restaurant = \App\Models\Restaurant::find($restaurantId);
+        
+        if (!$restaurant || !$restaurant->prefix) {
+            return 'SIN-PREFIJO-001';
+        }
+
+        // Buscar el último número usado para este restaurante
+        $lastNicho = \App\Models\Nicho::where('restaurant_id', $restaurantId)
+            ->where('identifier', 'like', $restaurant->prefix . '-%')
+            ->orderBy('identifier', 'desc')
+            ->first();
+
+        if (!$lastNicho) {
+            $nextNumber = 1;
+        } else {
+            // Extraer el número del último identificador
+            $lastIdentifier = $lastNicho->identifier;
+            $parts = explode('-', $lastIdentifier);
+            $lastPart = end($parts);
+            
+            // Asegurar que el último segmento es un número
+            if (is_numeric($lastPart)) {
+                $nextNumber = intval($lastPart) + 1;
+            } else {
+                // Si no es numérico, buscar el siguiente número disponible
+                $nextNumber = \App\Models\Nicho::where('restaurant_id', $restaurantId)->count() + 1;
+            }
+        }
+
+        return $restaurant->prefix . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+    }
+
     public static function form(Form $form): Form
     {
         $user = \Illuminate\Support\Facades\Auth::user();
@@ -49,7 +86,22 @@ class NichoResource extends Resource
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->label('Restaurante'),
+                    ->label('Restaurante')
+                    ->live()
+                    ->default(count($restaurantOptions) === 1 ? array_key_first($restaurantOptions) : null)
+                    ->afterStateUpdated(function ($state, $set) {
+                        if ($state) {
+                            $identifier = self::generateNextIdentifier($state);
+                            $set('identifier', $identifier);
+                        }
+                    })
+                    ->afterStateHydrated(function ($state, $set, $record) {
+                        // Solo generar identificador automáticamente en creación
+                        if (!$record && $state) {
+                            $identifier = self::generateNextIdentifier($state);
+                            $set('identifier', $identifier);
+                        }
+                    }),
                 Forms\Components\Select::make('customer_id')
                     ->relationship('customer', 'name')
                     ->required()
@@ -59,7 +111,10 @@ class NichoResource extends Resource
                 Forms\Components\TextInput::make('identifier')
                     ->required()
                     ->maxLength(255)
-                    ->label('Identificador (ej. CAVA-001)'),
+                    ->label('Identificador')
+                    ->disabled(fn ($record) => $record !== null) // Solo deshabilitar en edición
+                    ->dehydrated()
+                    ->helperText('Se genera automáticamente basado en el restaurante seleccionado'),
                 Forms\Components\Textarea::make('additional_info')
                     ->nullable()
                     ->maxLength(65535)

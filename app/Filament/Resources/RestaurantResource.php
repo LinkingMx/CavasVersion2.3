@@ -36,6 +36,19 @@ class RestaurantResource extends Resource
                     ->label('Nombre')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('prefix')
+                    ->label('Prefijo')
+                    ->maxLength(8)
+                    ->nullable()
+                    ->placeholder('Ej: REST-ABC o CAFE-DEF')
+                    ->helperText('Formato: 3-4 letras + guión + 3 letras (máximo 8 caracteres)')
+                    ->rules([
+                        'nullable',
+                        'regex:/^[A-Za-z]{3,4}-[A-Za-z]{3}$/',
+                    ])
+                    ->validationMessages([
+                        'regex' => 'El prefijo debe tener el formato: 3-4 letras, seguido de un guión, seguido de 3 letras (ej: REST-ABC)',
+                    ]),
                 Forms\Components\Textarea::make('address')
                     ->label('Dirección')
                     ->nullable()
@@ -57,6 +70,10 @@ class RestaurantResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nombre')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('prefix')
+                    ->label('Prefijo')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('address')
