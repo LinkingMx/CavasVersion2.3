@@ -112,8 +112,8 @@ class NichoResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->label('Identificador')
-                    ->disabled(fn ($record) => $record !== null) // Solo deshabilitar en edición
-                    ->dehydrated()
+                    ->disabled() // Siempre deshabilitado (solo lectura)
+                    ->dehydrated() // Importante: permite que el valor se guarde en la base de datos
                     ->helperText('Se genera automáticamente basado en el restaurante seleccionado'),
                 Forms\Components\Textarea::make('additional_info')
                     ->nullable()
